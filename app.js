@@ -3,14 +3,24 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+// needed so handlebars partials work
+var handlebars = require('hbs');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// changed these paths because routes moved into app_server
+var indexRouter = require('./app_server/routes/index');
+var usersRouter = require('./app_server/routes/users');
+// new router for the travel page
+var travelRouter = require('./app_server/routes/travel');
 
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+// views folder is now inside app_server
+app.set('views', path.join(__dirname, 'app_server', 'views'));
+
+// tells handlebars where the partials (header and footer) are
+handlebars.registerPartials(__dirname + '/app_server/views/partials');
+
 app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
@@ -21,6 +31,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+// connects the /travel url to the travel router
+app.use('/travel', travelRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
