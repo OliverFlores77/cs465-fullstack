@@ -11,6 +11,11 @@ var indexRouter = require('./app_server/routes/index');
 var usersRouter = require('./app_server/routes/users');
 // new router for the travel page
 var travelRouter = require('./app_server/routes/travel');
+// new router for the api
+var apiRouter = require('./app_api/routes/index');
+
+// Bring in the database
+require('./app_api/models/db');
 
 var app = express();
 
@@ -33,6 +38,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 // connects the /travel url to the travel router
 app.use('/travel', travelRouter);
+// connects the /api url to the api router
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
